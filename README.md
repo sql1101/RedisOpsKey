@@ -112,3 +112,8 @@ del key:c success
 
 Total Key Number:3
 ```
+
+
+#### 感谢
+* 感谢redis，redis-py-cluster 开发者
+* 本人代码能力有限，如果有代码有BUG和建议请与我联系，谢谢
