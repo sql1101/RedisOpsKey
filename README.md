@@ -15,7 +15,7 @@
 python3 RedisOpsKey.py
 usage: RedisOpsKey.py [-h] [--match MATCH] [--host HOST] [--port PORT] [--password PASSWORD] [--mode MODE] [--delete DELETE]
 
-example: python3 RedisOpsKey.py --match "a*"
+example: python3 RedisOpsKey.py --host 127.0.0.1 --match "a*"
 
 optional arguments:
   -h, --help           show this help message and exit
