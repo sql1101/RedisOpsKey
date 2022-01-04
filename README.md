@@ -1,5 +1,5 @@
 # RedisOpsKey
-批量检索redis key 支持正则匹配和删除
+批量检索redis key 支持正则匹配和删除,支持standalone 和 cluster
 
 #### 已测试环境
 * redis 3,redis 6
