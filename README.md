@@ -25,6 +25,7 @@ optional arguments:
   --password PASSWORD  redis host password default:None
   --mode MODE          redis mode, option:standalone(default) or cluster
   --delete DELETE      redis key delete, option:yes or None(default)
+  --db DB              redis databases default all database
 
 ```
 
