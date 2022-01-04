@@ -31,7 +31,7 @@ optional arguments:
 2. standalone 实例使用
 ```
 ###默认输出所有key
- python3 redis_scan.py --host 127.0.0.1
+python3 redis_scan.py --host 127.0.0.1
 foo
 a1
 goodsId
