@@ -31,7 +31,7 @@ optional arguments:
 2. standalone 实例使用
 ```
 ###默认输出所有key
-python3 redis_scan.py --host 127.0.0.1
+python3 RedisOpsKey.py --host 127.0.0.1
 foo
 a1
 goodsId
@@ -52,7 +52,7 @@ h1
 database:10 Total Key Number:1
 
 ###匹配正则
-python3 redis_scan.py --host 127.0.0.1 --match "a*"
+python3 RedisOpsKey.py --host 127.0.0.1 --match "a*"
 a1
 a2
 a4
@@ -63,7 +63,7 @@ a2
 database:2 Total Key Number:1
 
 ###删除key
-python3 redis_scan.py --host 127.0.0.1 --match "a*" --delete yes
+python3 RedisOpsKey.py --host 127.0.0.1 --match "a*" --delete yes
 a1
 del key:a1 success
 a2
@@ -76,4 +76,39 @@ database:0 Total Key Number:3
 a2
 del key:a2 success
 database:2 Total Key Number:1
+```
+2. cluster 实例使用
+
+```
+python3 RedisOpsKey.py --host 127.0.0.1 --port 7003 --mode cluster
+a
+c1
+c2
+c
+b
+
+
+Total Key Number:5
+python3 RedisOpsKey.py --host 127.0.0.1 --port 7003 --mode cluster --match "c"
+c
+
+
+Total Key Number:1
+python3 RedisOpsKey.py --host 127.0.0.1 --port 7003 --mode cluster --match "c*"
+c1
+c2
+c
+
+
+Total Key Number:3
+python3 RedisOpsKey.py --host 127.0.0.1 --port 7003 --mode cluster --match "c*" --delete yes
+c1
+del key:c1 success
+c2
+del key:c2 success
+c
+del key:c success
+
+
+Total Key Number:3
 ```
