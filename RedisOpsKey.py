@@ -15,7 +15,7 @@ def parse_args():
     parser.add_argument('--password', dest='password', type=str,default=None,required=False, help='redis host password default:None')
     parser.add_argument('--mode', dest='mode', type=str,default='standalone',required=False, help='redis mode, option:standalone(default) or cluster')
     parser.add_argument('--delete', dest='delete', type=str,default=None,required=False, help='redis key delete, option:yes or None(default) ')
-    parser.add_argument('--db', dest='db', type=str,default=None,required=False, help='redis databases')
+    parser.add_argument('--db', dest='db', type=str,default=None,required=False, help='redis databases default all database')
 
     return parser
 
