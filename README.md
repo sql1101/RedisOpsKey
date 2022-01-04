@@ -77,7 +77,7 @@ a2
 del key:a2 success
 database:2 Total Key Number:1
 ```
-2. cluster 实例使用
+3. cluster 实例使用
 
 ```
 python3 RedisOpsKey.py --host 127.0.0.1 --port 7003 --mode cluster
