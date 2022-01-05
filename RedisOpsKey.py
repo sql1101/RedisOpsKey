@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 # author：xushaohui time:2021/12/31
 
-
+from distutils.version import LooseVersion
 from redis import Redis
 from rediscluster import RedisCluster
 import argparse
@@ -15,9 +15,19 @@ def parse_args():
     parser.add_argument('--password', dest='password', type=str,default=None,required=False, help='redis host password default:None')
     parser.add_argument('--mode', dest='mode', type=str,default='standalone',required=False, help='redis mode, option:standalone(default) or cluster')
     parser.add_argument('--delete', dest='delete', type=str,default=None,required=False, help='redis key delete, option:yes or None(default) ')
-    parser.add_argument('--db', dest='db', type=str,default=None,required=False, help='redis databases default all database')
+    parser.add_argument('--db', dest='db', type=str,default=None,required=False, help='redis databases')
 
     return parser
+
+
+def del_key(client,key,version):
+    if LooseVersion(version) > LooseVersion('4.0.0'):
+        print("del key:%s success" % (key))
+    else:
+        client.delete(key)
+        print("del key:%s success" % (key))
+
+
 
 
 def RedisOpsKey(host,port,match_args,password=None,mode='standalone',del_mode=None,db=None):
@@ -26,6 +36,7 @@ def RedisOpsKey(host,port,match_args,password=None,mode='standalone',del_mode=No
         if db is None:
             client = Redis(host=host, port=port, password=password, db=0)
             database_number = client.config_get('databases').get('databases')
+            version = client.execute_command('INFO')['redis_version']
             client.close()
 
             for db in range(int(database_number)):
@@ -35,10 +46,10 @@ def RedisOpsKey(host,port,match_args,password=None,mode='standalone',del_mode=No
                     cursor, keys = client.scan(cursor, match=match_args, count=100)
                     counts += len(keys)
                     for key in keys:
-                        print(key.decode("utf-8"))
+                        key = key.decode("utf-8")
+                        print(key)
                         if del_mode == 'yes':
-                            client.delete(key)
-                            print("del key:%s success" % (key.decode("utf-8")))
+                            del_key(client,key,version)
                     if cursor == 0:
                         break
                 if counts != 0:
@@ -48,14 +59,15 @@ def RedisOpsKey(host,port,match_args,password=None,mode='standalone',del_mode=No
         else:
             cursor, counts = 0, 0
             client = Redis(host=host, port=port, password=password, db=db)
+            version = client.execute_command('INFO')['redis_version']
             while True:
                 cursor, keys = client.scan(cursor, match=match_args, count=100)
                 counts += len(keys)
                 for key in keys:
-                    print(key.decode("utf-8"))
+                    key = key.decode("utf-8")
+                    print(key)
                     if del_mode == 'yes':
-                        client.delete(key)
-                        print("del key:%s success" % (key.decode("utf-8")))
+                        del_key(client, key, version)
                 if cursor == 0:
                     break
             if counts != 0:
@@ -65,15 +77,16 @@ def RedisOpsKey(host,port,match_args,password=None,mode='standalone',del_mode=No
 
 
 
-    else:
+    elif redis_mode =='cluster':
         cursor, counts = 0, 0
         client = RedisCluster(host=host, port=port,password=password,decode_responses=True)
+        host_info = "%s:%s" % (host,port)
+        version = client.execute_command('INFO')[host_info]['redis_version']
         keys = client.scan_iter(match_args)
         for key in keys:
             print(key)
             if del_mode == 'yes':
-                client.delete(key)
-                print("del key:%s success" % (key))
+                del_key(client, key, version)
             counts += 1
         if counts != 0:
             print('\n')
