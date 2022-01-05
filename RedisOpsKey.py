@@ -22,6 +22,7 @@ def parse_args():
 
 def del_key(client,key,version):
     if LooseVersion(version) > LooseVersion('4.0.0'):
+        client.unlink(key)
         print("del key:%s success" % (key))
     else:
         client.delete(key)
